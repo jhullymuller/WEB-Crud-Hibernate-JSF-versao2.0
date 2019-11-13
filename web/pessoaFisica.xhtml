@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./../../principal.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:define name="contexto">
+        contexto
+        <h:form id="form">
+            
+          <h:panelGroup rendered="#{pessoaFisicaC.mostra_toolbar}">
+                <p:toolbar class="toolbar_pesquisa">
+                    <f:facet name="left">
+                        <p:commandButton value="Pesquisar" update="tabela"
+                                         action="#{pessoaFisicaC.pesquisarPessoaFisica()}"/>
+
+                        <p:commandButton value="Novo" 
+                                         update="@form"
+                                         actionListener="#{pessoaFisicaC.novo()}" />
+                    </f:facet>
+                </p:toolbar>
+
+                <h:panelGrid id="painel_pesquisa" columns="3" >
+                    <p:outputLabel value="Nome:" />
+                    <p:inputText id="nome" value="#{pessoaFisicaC.pessoaFisica.nome}" />
+                </h:panelGrid>
+
+                <p:dataTable id="tabela" var="pessoaFisica" 
+                             value="#{pessoaFisicaC.modelPessoasFisicas}" rows="10"
+                             paginator="true"
+                             emptyMessage="Nenhuma pessoa fisica..."
+                             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowsPerPageTemplate="5,10,15">
+
+                    <p:column headerText="Nome">
+                        <h:outputText value="#{pessoaFisicaC.nome}" />
+                    </p:column>
+
+                    <p:column headerText="E-mail">
+                        <h:outputText value="#{pessoaFisicaC.email}" />
+                    </p:column>
+
+                    <p:column headerText="Cpf">
+                        <h:outputText value="#{pessoaFisicaC.cpf}" />
+                    </p:column>
+
+                  
+                    <p:column headerText="Ação">
+                        <p:commandButton icon="ui-icon-pencil" 
+                                         update="@form" process="@this"
+                                         actionListener="#{pessoaFisicaC.carregarPessoaFisica()}" 
+                                         title="Alterar" >
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" title="Excluir"
+                                         update="msg_principal tabela"
+                                         actionListener="#{pessoaFisicaC.excluir()}" >
+                            <p:confirm header="Confirmação" message="Deseja Excluir?"
+                                       icon="pi pi-exclamation-triangle" />
+                        </p:commandButton>
+                    </p:column>
+
+
+                </p:dataTable>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                </p:confirmDialog>
+            </h:panelGroup>  
+        </h:form>
+    </ui:define>
+
+</ui:composition>

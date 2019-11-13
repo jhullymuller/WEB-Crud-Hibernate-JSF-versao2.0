@@ -10,6 +10,7 @@ import br.com.jsf.entidade.PessoaJuridica;
 import br.com.jsf.util.Gerador;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -50,10 +51,53 @@ public class PessoaJuridicaDaoImplTest {
         assertNotNull(pessoaJuridica.getId());
     }
 
-    //@Test
+    @Test
     public void testListarTodo() {
         System.out.println("listarTodo");
-        
+        ultimaPessoaFisicaBancoDados();
+       sessao = HibernateUtil.abrirSessao();
+       List<PessoaJuridica> pessoas = pessoaJuridicaDao.listarTodo(sessao);
+       sessao.close();
+        assertTrue(!pessoas.isEmpty());
     }
-    
+@Test
+    private PessoaJuridica ultimaPessoaFisicaBancoDados() {
+       sessao = HibernateUtil.abrirSessao();
+       Query consulta  = sessao.createQuery("select max(id)from PessoaFisica");
+       Long id = (Long)consulta.uniqueResult();
+       pessoaJuridica = pessoaJuridicaDao.pesquisaPorIdcomEndereco(id, sessao);
+       sessao.close();
+       if(id ==null){
+           testSalvar();
+       }else {
+           sessao = HibernateUtil.abrirSessao();
+           pessoaJuridica = pessoaJuridicaDao.pesquisaPorIdcomEndereco(id, sessao);
+           sessao.close();
+       } return pessoaJuridica;
+    }
+    @Test
+     public void testExcluir(){
+        System.out.println("Excluir pessoa Fisica");
+        ultimaPessoaFisicaBancoDados();
+        sessao = HibernateUtil.abrirSessao();
+        pessoaJuridicaDao.excluir(pessoaJuridica, sessao);
+        PessoaJuridica pJ = pessoaJuridicaDao.pesquisaPorIdcomEndereco(pessoaJuridica.getId(), sessao);
+        sessao.close();
+        assertNull(pJ.getId());
+        assertNull(pJ.getEnderecos().get(0).getId());
+        
+    } 
+     @Test
+    public void testPesquisarPorNome() {
+       System.out.println("Excluir pessoa Juridica");
+       ultimaPessoaJuridicaBancoDados();
+       sessao = HibernateUtil.abrirSessao();
+       List<PessoaJuridica> pessoas = pessoaJuridicaDao.pesquisarPessoaPornome(pessoaJuridica.getNome(), sessao);
+       sessao.close();
+        assertTrue(!pessoas.isEmpty());
+    }
+
+    private void ultimaPessoaJuridicaBancoDados() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

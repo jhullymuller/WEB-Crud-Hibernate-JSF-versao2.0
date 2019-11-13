@@ -44,6 +44,16 @@ public class PessoaFisicaDaoImpl extends BaseDaoImpl<PessoaFisica, Long> impleme
         return consulta.list();
     }
 
+    @Override
+    public PessoaFisica pesquisaCPF(String cpf, Session session) throws HibernateException {
+       Query consulta = session.createQuery("from Pessoa p  where p.cpf = :cpf");
+       consulta.setParameter("cpf", cpf);
+        return (PessoaFisica) consulta.uniqueResult();
+       
+    }
+    
+
+
   
    
 

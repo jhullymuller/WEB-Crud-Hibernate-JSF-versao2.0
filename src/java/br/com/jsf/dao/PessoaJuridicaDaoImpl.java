@@ -25,8 +25,29 @@ public class PessoaJuridicaDaoImpl extends BaseDaoImpl<PessoaJuridica, Long> imp
 
     @Override
     public List listarTodo(Session sessao) throws HibernateException {
-        Query consulta = sessao.createQuery("from PessoaJuridica");
+        Query consulta = sessao.createQuery("from Pessoa p join fetch p.enderecos where p.id = :id");
         return consulta.list();
+    }
+
+    @Override
+    public PessoaJuridica pesquisaPorIdcomEndereco(Long id, Session sessao) throws HibernateException {
+     Query consulta = sessao.createQuery("from Pessoa p join p.enderecos where p.id = :id");
+        return (PessoaJuridica) consulta.uniqueResult();
+    }
+
+    @Override
+    public List<PessoaJuridica> pesquisarPessoaPornome(String nome, Session session) throws HibernateException {
+        Query consulta = session.createQuery("from Pessoa p join fetch p.enderecos where p.nome like :nome");
+        consulta.setParameter("nome","%"+ nome + "%");
+        return consulta.list();
+    }
+
+    @Override
+    public PessoaJuridica pesquisaCNPJ(String cnpj, Session session) throws HibernateException {
+        Query consulta = session.createQuery("from Pessoa p where p.cnpj = :cnpj");
+        consulta.setParameter("cnpj", cnpj);
+        return (PessoaJuridica) consulta.uniqueResult();
+               
     }
     
     

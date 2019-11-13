@@ -19,7 +19,10 @@ public interface PessoaFisicaDao extends BaseDao<PessoaFisica, Long>{
     PessoaFisica pesquisarPorIDcomEndereco(Long id, Session session) throws HibernateException;
 
     List<PessoaFisica> pesquisarPessoaPornome(String nome,Session session) throws HibernateException;
-  
+    
+    PessoaFisica pesquisaCPF (String cpf , Session session)throws HibernateException;
+
+    
         
     }
 
