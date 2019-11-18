@@ -30,7 +30,7 @@ public class Endereco implements Serializable {
     private String logradouro;
     private String cep;
     private String numero;
-    private String bairo;
+    private String bairro;
     private String cidade;
     private String estado;
     private String complemento;
@@ -49,7 +49,7 @@ public class Endereco implements Serializable {
         this.logradouro = logradouro;
         this.cep = cep;
         this.numero = numero;
-        this.bairo = bairo;
+        this.bairro = bairo;
         this.cidade = cidade;
         this.estado = estado;
         this.complemento = complemento;
@@ -88,12 +88,12 @@ public class Endereco implements Serializable {
         this.numero = numero;
     }
 
-    public String getBairo() {
-        return bairo;
+    public String getBairro() {
+        return bairro;
     }
 
-    public void setBairo(String bairo) {
-        this.bairo = bairo;
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
     }
 
     public String getCidade() {

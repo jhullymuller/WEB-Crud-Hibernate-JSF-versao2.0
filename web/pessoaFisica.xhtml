@@ -1,16 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./../../principal.xhtml"
+                template="./principal.xhtml"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="contexto">
-        contexto
         <h:form id="form">
-            
-          <h:panelGroup rendered="#{pessoaFisicaC.mostra_toolbar}">
+
+            <h:panelGroup rendered="#{pessoaFisicaC.mostra_toolbar}">
                 <p:toolbar class="toolbar_pesquisa">
                     <f:facet name="left">
                         <p:commandButton value="Pesquisar" update="tabela"
@@ -24,7 +23,7 @@
 
                 <h:panelGrid id="painel_pesquisa" columns="3" >
                     <p:outputLabel value="Nome:" />
-                    <p:inputText id="nome" value="#{pessoaFisicaC.pessoaFisica.nome}" />
+                    <p:inputText id="nomePesquisa" value="#{pessoaFisicaC.pessoaFisica.nome}" />
                 </h:panelGrid>
 
                 <p:dataTable id="tabela" var="pessoaFisica" 
@@ -35,18 +34,18 @@
                              rowsPerPageTemplate="5,10,15">
 
                     <p:column headerText="Nome">
-                        <h:outputText value="#{pessoaFisicaC.nome}" />
+                        <h:outputText value="#{pessoaFisica.nome}" />
                     </p:column>
 
                     <p:column headerText="E-mail">
-                        <h:outputText value="#{pessoaFisicaC.email}" />
+                        <h:outputText value="#{pessoaFisica.email}" />
                     </p:column>
 
                     <p:column headerText="Cpf">
-                        <h:outputText value="#{pessoaFisicaC.cpf}" />
+                        <h:outputText value="#{pessoaFisica.cpf}" />
                     </p:column>
 
-                  
+
                     <p:column headerText="Ação">
                         <p:commandButton icon="ui-icon-pencil" 
                                          update="@form" process="@this"
@@ -70,6 +69,148 @@
                     <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
                 </p:confirmDialog>
             </h:panelGroup>  
+
+            <!--ínicio parte do codigo para salvar e alterar-->
+            <h:panelGroup rendered="#{!pessoaFisicaC.mostra_toolbar}">
+                <p:toolbar class="toolbar_pesquisa" >
+                    <f:facet name="left">
+                        <p:commandButton value="Salvar" update="@form msg_principal" 
+                                         action="#{pessoaFisicaC.salvar()}" />
+
+                        <p:commandButton value="Voltar"
+                                         update="@form msg_principal" immediate="true"
+                                         actionListener="#{pessoaFisicaC.novo()}"/>
+                    </f:facet>
+                </p:toolbar>
+
+                <h:panelGrid id="painel" columns="2">
+                    <p:outputLabel value="Cliente:" /> 
+                    <p:inputText id="nome" value="#{pessoaFisicaC.pessoaFisica.nome}"
+                                 required="true" 
+                                 requiredMessage="Nome é obrigatório" />
+
+                    <p:outputLabel value="CPF:" /> 
+                    <p:inputMask id="cpf"  required="true" 
+                                 mask="999.999.999-99"
+                                 value="#{pessoaFisicaC.pessoaFisica.cpf}"
+                                 requiredMessage="CPF é obrigatório" />
+
+                    <p:outputLabel value="RG:" /> 
+                    <p:inputText id="rg"  required="true" 
+                                 value="#{pessoaFisicaC.pessoaFisica.rg}"
+                                 requiredMessage="RG é obrigatório" />
+
+                    <p:outputLabel value="E-mail:" /> 
+                    <p:inputText id="email"  required="true"
+                                 value="#{pessoaFisicaC.pessoaFisica.email}"
+                                 requiredMessage="e-mail é obrigatório" />
+
+                    <p:outputLabel value="Telefone:" /> 
+                    <p:inputMask id="tel"  required="true"
+                                 mask="(99)9999-9999"
+                                 value="#{pessoaFisicaC.pessoaFisica.telefone}"
+                                 requiredMessage="telefone é obrigatório" />
+
+
+
+                    <h:outputText />
+
+                </h:panelGrid>
+
+                <p:fieldset legend="Dados de Endereço">
+                    <h:panelGrid id="painel_endereco" columns="2">
+                        <p:outputLabel value="Logradouro" /> 
+                        <p:inputText id="lougradouro" value="#{pessoaFisicaC.endereco.logradouro}"
+                                     required="true" 
+                                     requiredMessage="Logradouro é obrigatório" />
+
+                        <p:outputLabel value="Cep" /> 
+                        <p:inputText id="cep" value="#{pessoaFisicaC.endereco.cep}"
+                                     required="true" 
+                                     requiredMessage="Cep é obrigatório" />
+
+                        <p:outputLabel value="Número" /> 
+                        <p:inputText id="número" value="#{pessoaFisicaC.endereco.numero}"
+                                     required="true" 
+                                     requiredMessage="Número é obrigatório" />
+
+                        <p:outputLabel value="Bairro" /> 
+                        <p:inputText id="bairro" value="#{pessoaFisicaC.endereco.bairro}"
+                                     required="true" 
+                                     requiredMessage="Bairro é obrigatório" />
+
+                        <p:outputLabel value="Cidade" /> 
+                        <p:inputText id="cidade" value="#{pessoaFisicaC.endereco.cidade}"
+                                     required="true" 
+                                     requiredMessage="Cidade é obrigatório" />
+
+                        <p:outputLabel value="Estado" /> 
+                        <p:inputText id="estado" value="#{pessoaFisicaC.endereco.estado}"
+                                     required="true" 
+                                     requiredMessage="Estado é obrigatório" />
+
+                        <p:outputLabel value="Complemento" /> 
+                        <p:inputText id="complemento" value="#{pessoaFisicaC.endereco.complemento}"
+                                     required="true" 
+                                     requiredMessage="Complemento é obrigatório" />
+
+
+                        <p:outputLabel value="Observação" /> 
+                        <p:inputText id="observação" value="#{pessoaFisicaC.endereco.observacao}"/>
+
+                        <!-- primeira coluna botão-->
+
+                        <p:commandButton value="Adicionar Endereço" process="@this,painel_endereco"
+                                         actionListener="#{pessoaFisicaC.addEndereco()}"
+                                         update="tabelaEndereco, painel_endereco "/> 
+
+
+
+                    </h:panelGrid>
+                       
+                    <!-- Tabela pra adicionar endereco-->
+
+                    <p:dataTable id="tabelaEndereco" var="endereco" 
+                                 value="#{pessoaFisicaC.enderecos}" rows="10"
+                                 paginator="true"
+                                 emptyMessage="Nenhuma pessoa fisica..."
+                                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowsPerPageTemplate="5,10,15">
+
+                        <p:column headerText="Logradouro">
+                            <h:outputText value="#{endereco.logradouro}" />
+                        </p:column>
+
+                        <p:column headerText="Cep">
+                            <h:outputText value="#{endereco.cep}" />
+                        </p:column>
+
+                        <p:column headerText="Bairro">
+                            <h:outputText value="#{endereco.bairro}" />
+                        </p:column>
+
+
+                        <p:column headerText="Ação">
+                            <p:commandButton icon="ui-icon-pencil" 
+                                             update="@form" process="@this"
+                                             actionListener="#{pessoaFisicaC.carregarPessoaFisica()}" 
+                                             title="Alterar" >
+                            </p:commandButton>
+
+                            <p:commandButton icon="ui-icon-trash" title="Excluir"
+                                             update="msg_principal tabela"
+                                             actionListener="#{pessoaFisicaC.excluir()}" >
+                                <p:confirm header="Confirmação" message="Deseja Excluir?"
+                                           icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                        </p:column>
+
+
+                    </p:dataTable>
+
+
+                </p:fieldset>
+            </h:panelGroup>
         </h:form>
     </ui:define>
 

@@ -8,7 +8,9 @@ package br.com.jsf.controle;
 import br.com.jsf.dao.HibernateUtil;
 import br.com.jsf.dao.PessoaFisicaDao;
 import br.com.jsf.dao.PessoaFisicaDaoImpl;
+import br.com.jsf.entidade.Endereco;
 import br.com.jsf.entidade.PessoaFisica;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -31,7 +33,9 @@ public class PessoaFisicaControle {
     private PessoaFisica pessoaFisica;
     private PessoaFisicaDao pessoaFisicaDao;
     private Session sessao;
+    private Endereco endereco;
     private DataModel<PessoaFisica> modelPessoasFisicas;
+    private List<Endereco> enderecos;
 
     public void pesquisarPessoaFisica() {
         pessoaFisicaDao = new PessoaFisicaDaoImpl();
@@ -41,7 +45,7 @@ public class PessoaFisicaControle {
             pessoas = pessoaFisicaDao.pesquisarPessoaPornome(pessoaFisica.getNome(), sessao);
             modelPessoasFisicas = new ListDataModel<>(pessoas);
         } catch (Exception e) {
-            System.out.println("Erro ao pesquisar pf por nome");
+            System.out.println("Erro ao pesquisar pf por nome " + e.getMessage());
         } finally {
             sessao.close();
         }
@@ -93,6 +97,14 @@ public class PessoaFisicaControle {
               sessao.close();
           }
     }
+    public void addEndereco(){
+       if(enderecos == null){
+           enderecos = new ArrayList<>();
+       } 
+       enderecos.add(endereco);
+       
+       endereco = new Endereco();
+    }
 
 //getter e setter
     public boolean isMostra_toolbar() {
@@ -104,6 +116,9 @@ public class PessoaFisicaControle {
     }
 
     public PessoaFisica getPessoaFisica() {
+        if(pessoaFisica== null){
+            pessoaFisica = new PessoaFisica();
+        }
         return pessoaFisica;
     }
 
@@ -115,8 +130,23 @@ public class PessoaFisicaControle {
         return modelPessoasFisicas;
     }
 
+    public Endereco getEndereco() {
+        if(endereco == null){
+            endereco = new Endereco();
+        }
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
     private PessoaFisicaDao PessoaFisicaDaoImpl() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<Endereco> getEnderecos() {
+        return enderecos;
     }
 
 }

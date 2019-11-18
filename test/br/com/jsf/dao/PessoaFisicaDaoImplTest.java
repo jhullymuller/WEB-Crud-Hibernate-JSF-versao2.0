@@ -30,7 +30,7 @@ public class PessoaFisicaDaoImplTest {
         pessoaFisicaDao = new PessoaFisicaDaoImpl();
     }
 
-   //@Test
+   @Test
     public void testSalvar() {
         System.out.println("teste Salvar pessoa fisica");
         List<Endereco> enderecos = new ArrayList<Endereco>();
@@ -74,7 +74,7 @@ public class PessoaFisicaDaoImplTest {
         assertTrue(!pessoas.isEmpty());
     }
     
-    @Test
+    // @Test
     public void pesquisaCPF(){
        ultimaPessoaFisicaBancoDados();
        sessao = HibernateUtil.abrirSessao();
