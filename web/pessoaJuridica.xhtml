@@ -7,55 +7,56 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:define name="contexto">
+        <h1>Pessoa Jurídica</h1>
         <h:form id="form">
 
-            <h:panelGroup rendered="#{pessoaFisicaC.mostra_toolbar}">
+            <h:panelGroup rendered="#{pessoaJuridicaC.mostra_toolbar}">
                 <p:toolbar class="toolbar_pesquisa">
                     <f:facet name="left">
                         <p:commandButton value="Pesquisar" update="tabela"
-                                         action="#{pessoaFisicaC.pesquisarPessoaFisica()}"/>
+                                         action="#{pessoaJuridicaC.pesquisarPessoaJuridica()}"/>
 
                         <p:commandButton value="Novo" 
                                          update="@form"
-                                         actionListener="#{pessoaFisicaC.novo()}" />
+                                         actionListener="#{pessoaJuridicaC.novo()}" />
                     </f:facet>
                 </p:toolbar>
 
                 <h:panelGrid id="painel_pesquisa" columns="3" >
                     <p:outputLabel value="Nome:" />
-                    <p:inputText id="nomePesquisa" value="#{pessoaFisicaC.pessoaFisica.nome}" />
+                    <p:inputText id="nomePesquisa" value="#{pessoaJuridicaC.pessoaJuridica.nome}" />
                 </h:panelGrid>
 
-                <p:dataTable id="tabela" var="pessoaFisica" 
-                             value="#{pessoaFisicaC.modelPessoasFisicas}" rows="10"
+                <p:dataTable id="tabela" var="pessoaJuridica" 
+                             value="#{pessoaJuridicaC.modelPessoasJuridicas}" rows="10"
                              paginator="true"
-                             emptyMessage="Nenhuma pessoa fisica..."
+                             emptyMessage="Nenhuma pessoa Juridica..."
                              paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              rowsPerPageTemplate="5,10,15">
 
                     <p:column headerText="Nome">
-                        <h:outputText value="#{pessoaFisica.nome}" />
+                        <h:outputText value="#{pessoaJuridica.nome}" />
                     </p:column>
 
                     <p:column headerText="E-mail">
-                        <h:outputText value="#{pessoaFisica.email}" />
+                        <h:outputText value="#{pessoaJuridica.email}" />
                     </p:column>
 
-                    <p:column headerText="Cpf">
-                        <h:outputText value="#{pessoaFisica.cpf}" />
+                    <p:column headerText="CNPJ">
+                        <h:outputText value="#{pessoaJuridica.cnpj}" />
                     </p:column>
 
 
                     <p:column headerText="Ação">
                         <p:commandButton icon="ui-icon-pencil" 
                                          update="@form" process="@this"
-                                         actionListener="#{pessoaFisicaC.carregarPessoaFisica()}" 
+                                         actionListener="#{pessoaJuridicaC.carregarPessoaJuridica()}" 
                                          title="Alterar" >
                         </p:commandButton>
 
                         <p:commandButton icon="ui-icon-trash" title="Excluir"
                                          update="msg_principal tabela"
-                                         actionListener="#{pessoaFisicaC.excluir()}" >
+                                         actionListener="#{pessoaJuridicaC.excluir()}" >
                             <p:confirm header="Confirmação" message="Deseja Excluir?"
                                        icon="pi pi-exclamation-triangle" />
                         </p:commandButton>
@@ -71,44 +72,40 @@
             </h:panelGroup>  
 
             <!--ínicio parte do codigo para salvar e alterar-->
-            <h:panelGroup rendered="#{!pessoaFisicaC.mostra_toolbar}">
+            <h:panelGroup rendered="#{!pessoaJuridicaC.mostra_toolbar}">
                 <p:toolbar class="toolbar_pesquisa" >
                     <f:facet name="left">
                         <p:commandButton value="Salvar" update="@form msg_principal" 
-                                         action="#{pessoaFisicaC.salvar()}" process="@this,painel" />
+                                         action="#{pessoaJuridicaC.salvar()}" process="@this,painel" />
 
                         <p:commandButton value="Voltar"
                                          update="@form msg_principal" immediate="true"
-                                         actionListener="#{pessoaFisicaC.novo()}"/>
+                                         actionListener="#{pessoaJuridicaC.novo()}"/>
                     </f:facet>
                 </p:toolbar>
 
                 <h:panelGrid id="painel" columns="2">
                     <p:outputLabel value="Cliente:" /> 
-                    <p:inputText id="nome" value="#{pessoaFisicaC.pessoaFisica.nome}"
+                    <p:inputText id="nome" value="#{pessoaJuridicaC.pessoaJuridica.nome}"
                                  required="true" 
                                  requiredMessage="Nome é obrigatório" />
 
-                    <p:outputLabel value="CPF:" /> 
-                    <p:inputMask id="cpf"  required="true" 
+                    <p:outputLabel value="CNPJ:" /> 
+                    <p:inputMask id="cnpj"  required="true" 
                                  mask="999.999.999-99"
-                                 value="#{pessoaFisicaC.pessoaFisica.cpf}"
-                                 requiredMessage="CPF é obrigatório" />
+                                 value="#{pessoaJuridicaC.pessoaJuridica.cnpj}"
+                                 requiredMessage="CNPJ é obrigatório" />
 
-                    <p:outputLabel value="RG:" /> 
-                    <p:inputText id="rg"  required="true" 
-                                 value="#{pessoaFisicaC.pessoaFisica.rg}"
-                                 requiredMessage="RG é obrigatório" />
-
+                    
                     <p:outputLabel value="E-mail:" /> 
                     <p:inputText id="email"  required="true"
-                                 value="#{pessoaFisicaC.pessoaFisica.email}"
+                                 value="#{pessoaJuridicaC.pessoaJuridica.email}"
                                  requiredMessage="e-mail é obrigatório" />
 
                     <p:outputLabel value="Telefone:" /> 
                     <p:inputMask id="tel"  required="true"
                                  mask="(99)9999-9999"
-                                 value="#{pessoaFisicaC.pessoaFisica.telefone}"
+                                 value="#{pessoaJuridicaC.pessoaJuridica.telefone}"
                                  requiredMessage="telefone é obrigatório" />
 
 
@@ -120,48 +117,48 @@
                 <p:fieldset legend="Dados de Endereço">
                     <h:panelGrid id="painel_endereco" columns="2">
                         <p:outputLabel value="Logradouro" /> 
-                        <p:inputText id="lougradouro" value="#{pessoaFisicaC.endereco.logradouro}"
+                        <p:inputText id="lougradouro" value="#{pessoaJuridicaC.endereco.logradouro}"
                                      required="true" 
                                      requiredMessage="Logradouro é obrigatório" />
 
                         <p:outputLabel value="Cep" /> 
-                        <p:inputText id="cep" value="#{pessoaFisicaC.endereco.cep}"
+                        <p:inputText id="cep" value="#{pessoaJuridicaC.endereco.cep}"
                                      required="true" 
                                      requiredMessage="Cep é obrigatório" />
 
                         <p:outputLabel value="Número" /> 
-                        <p:inputText id="número" value="#{pessoaFisicaC.endereco.numero}"
+                        <p:inputText id="número" value="#{pessoaJuridicaC.endereco.numero}"
                                      required="true" 
                                      requiredMessage="Número é obrigatório" />
 
                         <p:outputLabel value="Bairro" /> 
-                        <p:inputText id="bairro" value="#{pessoaFisicaC.endereco.bairro}"
+                        <p:inputText id="bairro" value="#{pessoaJuridicaC.endereco.bairro}"
                                      required="true" 
                                      requiredMessage="Bairro é obrigatório" />
 
                         <p:outputLabel value="Cidade" /> 
-                        <p:inputText id="cidade" value="#{pessoaFisicaC.endereco.cidade}"
+                        <p:inputText id="cidade" value="#{pessoaJuridicaC.endereco.cidade}"
                                      required="true" 
                                      requiredMessage="Cidade é obrigatório" />
 
                         <p:outputLabel value="Estado" /> 
-                        <p:inputText id="estado" value="#{pessoaFisicaC.endereco.estado}"
+                        <p:inputText id="estado" value="#{pessoaJuridicaC.endereco.estado}"
                                      required="true" 
                                      requiredMessage="Estado é obrigatório" />
 
                         <p:outputLabel value="Complemento" /> 
-                        <p:inputText id="complemento" value="#{pessoaFisicaC.endereco.complemento}"
+                        <p:inputText id="complemento" value="#{pessoaJuridicaC.endereco.complemento}"
                                      required="true" 
                                      requiredMessage="Complemento é obrigatório" />
 
 
                         <p:outputLabel value="Observação" /> 
-                        <p:inputText id="observação" value="#{pessoaFisicaC.endereco.observacao}"/>
+                        <p:inputText id="observação" value="#{pessoaJuridicaC.endereco.observacao}"/>
 
                         <!-- primeira coluna botão-->
 
                         <p:commandButton value="Adicionar Endereço" process="@this,painel_endereco"
-                                         actionListener="#{pessoaFisicaC.addEndereco()}"
+                                         actionListener="#{pessoaJuridicaC.addEndereco()}"
                                          update="tabelaEndereco, painel_endereco "/> 
 
 
@@ -171,9 +168,9 @@
                     <!-- Tabela pra adicionar endereco-->
 
                     <p:dataTable id="tabelaEndereco" var="endereco" 
-                                 value="#{pessoaFisicaC.enderecos}" rows="10"
+                                 value="#{pessoaJuridicaC.enderecos}" rows="10"
                                  paginator="true"
-                                 emptyMessage="Nenhuma pessoa fisica..."
+                                 emptyMessage="Nenhuma pessoa juridica..."
                                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  rowsPerPageTemplate="5,10,15">
 
@@ -193,14 +190,14 @@
                         <p:column headerText="Ação">
                            <!--  <p:commandButton icon="ui-icon-pencil" 
                                              update="@form" process="@this"
-                                             actionListener="# {pessoaFisicaC.carregarPessoaFisica()}" 
+                                             actionListener="# {pessoaJuridicaC.carregarPessoaFisica()}" 
                                              title="Alterar" >
                             </p:commandButton>
                            -->
                            <p:commandButton icon="ui-icon-trash" title="Excluir" process="@this"
                                              update="msg_principal tabelaEndereco"
-                                             actionListener="# {pessoaFisicaC.excluir()}" >
-                                <f:setPropertyActionListener target="#{pessoaFisicaC.endereco}"
+                                             actionListener="# {pessoaJuridicaC.excluir()}" >
+                                <f:setPropertyActionListener target="#{pessoaJuridicaC.endereco}"
                                                              value="{endereco}"/>
                                 <p:confirm header="Confirmação" message="Deseja Excluir?"
                                            icon="pi pi-exclamation-triangle" />

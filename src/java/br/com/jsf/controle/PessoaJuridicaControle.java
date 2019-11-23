@@ -6,10 +6,11 @@
 package br.com.jsf.controle;
 
 import br.com.jsf.dao.HibernateUtil;
-import br.com.jsf.dao.PessoaFisicaDao;
-import br.com.jsf.dao.PessoaFisicaDaoImpl;
+import br.com.jsf.dao.PessoaJuridicaDao;
+import br.com.jsf.dao.PessoaJuridicaDaoImpl;
 import br.com.jsf.entidade.Endereco;
-import br.com.jsf.entidade.PessoaFisica;
+import br.com.jsf.entidade.PessoaJuridica;
+import br.com.jsf.entidade.PessoaJuridica;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -25,25 +26,25 @@ import org.hibernate.Session;
  *
  * @author Aluno
  */
-@ManagedBean(name = "pessoaFisicaC")
+@ManagedBean(name = "pessoaJuridicaC")
 @ViewScoped
-public class PessoaFisicaControle {
+public class PessoaJuridicaControle {
 
     private boolean mostra_toolbar = true;
-    private PessoaFisica pessoaFisica;
-    private PessoaFisicaDao pessoaFisicaDao;
+    private PessoaJuridica pessoaJuridica;
+    private PessoaJuridicaDao pessoaJuridicaDao;
     private Session sessao;
     private Endereco endereco;
-    private DataModel<PessoaFisica> modelPessoasFisicas;
+    private DataModel<PessoaJuridica> modelPessoasJuridicas;
     private List<Endereco> enderecos;
 
-    public void pesquisarPessoaFisica() {
-        pessoaFisicaDao = new PessoaFisicaDaoImpl();
-        List<PessoaFisica> pessoas;
+    public void pesquisarPessoaJuridica() {
+        pessoaJuridicaDao = new PessoaJuridicaDaoImpl();
+        List<PessoaJuridica> pessoas;
         try {
             sessao = HibernateUtil.abrirSessao();
-            pessoas = pessoaFisicaDao.pesquisarPessoaPornome(pessoaFisica.getNome(), sessao);
-            modelPessoasFisicas = new ListDataModel<>(pessoas);
+            pessoas = pessoaJuridicaDao.pesquisarPessoaPornome(pessoaJuridica.getNome(), sessao);
+            modelPessoasJuridicas = new ListDataModel<>(pessoas);
         } catch (Exception e) {
             System.out.println("Erro ao pesquisar pf por nome " + e.getMessage());
         } finally {
@@ -54,16 +55,16 @@ public class PessoaFisicaControle {
     public void novo() {
         mostra_toolbar = !mostra_toolbar;
         enderecos = new ArrayList<>();
-        pessoaFisica = new PessoaFisica();
+        pessoaJuridica = new PessoaJuridica();
     }
     
-    public void carregarPessoaFisica() {
-         pessoaFisica = modelPessoasFisicas.getRowData();
+    public void carregarPessoaJuridica() {
+         pessoaJuridica = modelPessoasJuridicas.getRowData();
          mostra_toolbar = !mostra_toolbar;
-        pessoaFisicaDao = new PessoaFisicaDaoImpl();
+        pessoaJuridicaDao = new PessoaJuridicaDaoImpl();
         try {
             sessao = HibernateUtil.abrirSessao();
-            enderecos = pessoaFisica.getEnderecos();
+            enderecos = pessoaJuridica.getEnderecos();
         } catch (Exception e) {
             System.out.println("Erro ao pesquisar pf por nome " + e.getMessage());
         } finally {
@@ -73,11 +74,11 @@ public class PessoaFisicaControle {
     
     public void excluir(){
          FacesContext contexto = FacesContext.getCurrentInstance();
-        pessoaFisica = modelPessoasFisicas.getRowData();
+        pessoaJuridica = modelPessoasJuridicas.getRowData();
         sessao = HibernateUtil.abrirSessao();
         try {
-            pessoaFisicaDao = new PessoaFisicaDaoImpl();
-            pessoaFisicaDao.excluir(pessoaFisica, sessao);
+            pessoaJuridicaDao = new PessoaJuridicaDaoImpl();
+            pessoaJuridicaDao.excluir(pessoaJuridica, sessao);
             sessao.close();
             FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Excluído ao Salvar!", "");
@@ -85,9 +86,9 @@ public class PessoaFisicaControle {
         } catch (HibernateException e) {
             System.err.println("Erro ao excluir " + e.getMessage());
         }
-        pessoaFisica = new PessoaFisica();
-        pessoaFisica.setNome("");
-        pesquisarPessoaFisica();
+        pessoaJuridica = new PessoaJuridica();
+        pessoaJuridica.setNome("");
+        pesquisarPessoaJuridica();
     }
     
     public void excluirEndereco(){
@@ -99,17 +100,17 @@ public class PessoaFisicaControle {
           FacesContext contexto = FacesContext.getCurrentInstance();
           sessao = HibernateUtil.abrirSessao();
           try {
-            pessoaFisicaDao = new PessoaFisicaDaoImpl();
-            pessoaFisica.setEnderecos(enderecos);
+            pessoaJuridicaDao = new PessoaJuridicaDaoImpl();
+            pessoaJuridica.setEnderecos(enderecos);
             for(Endereco endereco1 : enderecos){
-                endereco1.setPessoa(pessoaFisica);
+                endereco1.setPessoa(pessoaJuridica);
             }
-            pessoaFisicaDao.salvarOuAlterar(pessoaFisica, sessao);
+            pessoaJuridicaDao.salvarOuAlterar(pessoaJuridica, sessao);
             
              FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO,
                     "Salvo com Sucesso!", "");
             contexto.addMessage(null, mensagem);
-            pessoaFisica = null;
+            pessoaJuridica = null;
         } catch (Exception e) {
               System.out.println("erro ao salvar "+ e.getMessage());
              FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO,
@@ -137,19 +138,19 @@ public class PessoaFisicaControle {
         this.mostra_toolbar = mostra_toolbar;
     }
 
-    public PessoaFisica getPessoaFisica() {
-        if(pessoaFisica== null){
-            pessoaFisica = new PessoaFisica();
+    public PessoaJuridica getPessoaJuridica() {
+        if(pessoaJuridica== null){
+            pessoaJuridica = new PessoaJuridica();
         }
-        return pessoaFisica;
+        return pessoaJuridica;
     }
 
-    public void setPessoaFisica(PessoaFisica pessoaFisica) {
-        this.pessoaFisica = pessoaFisica;
+    public void setPessoaJuridica(PessoaJuridica pessoaJuridica) {
+        this.pessoaJuridica = pessoaJuridica;
     }
 
-    public DataModel<PessoaFisica> getModelPessoasFisicas() {
-        return modelPessoasFisicas;
+    public DataModel<PessoaJuridica> getModelPessoasJuridicas() {
+        return modelPessoasJuridicas;
     }
 
     public Endereco getEndereco() {

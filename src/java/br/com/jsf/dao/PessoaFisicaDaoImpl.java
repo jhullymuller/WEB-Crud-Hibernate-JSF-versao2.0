@@ -5,6 +5,7 @@
  */
 package br.com.jsf.dao;
 
+import br.com.jsf.entidade.Endereco;
 import br.com.jsf.entidade.PessoaFisica;
 import java.io.Serializable;
 import java.util.List;
@@ -39,7 +40,7 @@ public class PessoaFisicaDaoImpl extends BaseDaoImpl<PessoaFisica, Long> impleme
 
     @Override
     public List<PessoaFisica> pesquisarPessoaPornome(String nome, Session session) throws HibernateException {
-        Query consulta = session.createQuery("Select distinct (p) from Pessoa p join fetch p.enderecos where p.nome like :nome");
+        Query consulta = session.createQuery("Select distinct (p) from PessoaFisica p join fetch p.enderecos where p.nome like :nome");
         consulta.setParameter("nome","%"+ nome +"%");
         return consulta.list();
     }
@@ -50,6 +51,13 @@ public class PessoaFisicaDaoImpl extends BaseDaoImpl<PessoaFisica, Long> impleme
        consulta.setParameter("cpf", cpf);
         return (PessoaFisica) consulta.uniqueResult();
        
+    }
+
+    @Override
+    public List<Endereco> pesquisar(List<Endereco> enderecos, Session session) {
+       Query consulta = session.createQuery("from Pessoa p  where p.endereco = :endereco");
+       consulta.setParameter("endereco","%"+ enderecos + "%");
+        return consulta.list();
     }
     
 

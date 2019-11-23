@@ -11,6 +11,7 @@ import br.com.jsf.entidade.Endereco;
 import br.com.jsf.entidade.Fornecedor;
 import br.com.jsf.entidade.Pessoa;
 import br.com.jsf.entidade.PessoaFisica;
+import br.com.jsf.entidade.PessoaJuridica;
 import br.com.jsf.entidade.Produto;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -37,6 +38,7 @@ public class HibernateUtil {
             cfg.addAnnotatedClass(Classificacao.class);
             cfg.addAnnotatedClass(Pessoa.class);
             cfg.addAnnotatedClass(PessoaFisica.class);
+            cfg.addAnnotatedClass(PessoaJuridica.class);
             cfg.addAnnotatedClass(Endereco.class);
 
             cfg.configure("/br/com/jsf/dao/hibernate.cfg.xml");

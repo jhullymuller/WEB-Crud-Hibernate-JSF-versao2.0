@@ -5,6 +5,7 @@
  */
 package br.com.jsf.dao;
 
+import br.com.jsf.entidade.Endereco;
 import br.com.jsf.entidade.PessoaFisica;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -21,6 +22,8 @@ public interface PessoaFisicaDao extends BaseDao<PessoaFisica, Long>{
     List<PessoaFisica> pesquisarPessoaPornome(String nome,Session session) throws HibernateException;
     
     PessoaFisica pesquisaCPF (String cpf , Session session)throws HibernateException;
+
+    public List<Endereco> pesquisar(List<Endereco> enderecos, Session sessao);
 
     
         
