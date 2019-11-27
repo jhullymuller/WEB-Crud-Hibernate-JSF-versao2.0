@@ -40,7 +40,7 @@ public class PessoaFisicaDaoImpl extends BaseDaoImpl<PessoaFisica, Long> impleme
 
     @Override
     public List<PessoaFisica> pesquisarPessoaPornome(String nome, Session session) throws HibernateException {
-        Query consulta = session.createQuery("Select distinct (p) from PessoaFisica p join fetch p.enderecos where p.nome like :nome");
+        Query consulta = session.createQuery("Select distinct (p) from PessoaFisica p  left join fetch p.enderecos where p.nome like :nome");
         consulta.setParameter("nome","%"+ nome +"%");
         return consulta.list();
     }

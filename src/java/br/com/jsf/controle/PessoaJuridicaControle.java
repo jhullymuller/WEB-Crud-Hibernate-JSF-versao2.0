@@ -5,6 +5,8 @@
  */
 package br.com.jsf.controle;
 
+import br.com.jsf.dao.EnderecoDao;
+import br.com.jsf.dao.EnderecoDaoImpl;
 import br.com.jsf.dao.HibernateUtil;
 import br.com.jsf.dao.PessoaJuridicaDao;
 import br.com.jsf.dao.PessoaJuridicaDaoImpl;
@@ -22,10 +24,7 @@ import javax.faces.model.ListDataModel;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
-/**
- *
- * @author Aluno
- */
+
 @ManagedBean(name = "pessoaJuridicaC")
 @ViewScoped
 public class PessoaJuridicaControle {
@@ -38,7 +37,7 @@ public class PessoaJuridicaControle {
     private DataModel<PessoaJuridica> modelPessoasJuridicas;
     private List<Endereco> enderecos;
 
-    public void pesquisarPessoaJuridica() {
+     public void pesquisarPessoaJuridica() {
         pessoaJuridicaDao = new PessoaJuridicaDaoImpl();
         List<PessoaJuridica> pessoas;
         try {
@@ -53,12 +52,12 @@ public class PessoaJuridicaControle {
     }
 
     public void novo() {
-        mostra_toolbar = !mostra_toolbar;
+       mostra_toolbar = !mostra_toolbar;
         enderecos = new ArrayList<>();
         pessoaJuridica = new PessoaJuridica();
     }
     
-    public void carregarPessoaJuridica() {
+     public void carregarPessoaJuridica() {
          pessoaJuridica = modelPessoasJuridicas.getRowData();
          mostra_toolbar = !mostra_toolbar;
         pessoaJuridicaDao = new PessoaJuridicaDaoImpl();
@@ -72,8 +71,19 @@ public class PessoaJuridicaControle {
         }
     }
     
+    public void carregarEndereco(Endereco endereco){
+        this.endereco = endereco;
+        if(pessoaJuridica.getEnderecos() != null){
+            enderecos = pessoaJuridica.getEnderecos();
+        }
+        excluirEndereco(endereco);
+        this.endereco.setId(null);
+    }
+    
+    
+    
     public void excluir(){
-         FacesContext contexto = FacesContext.getCurrentInstance();
+          FacesContext contexto = FacesContext.getCurrentInstance();
         pessoaJuridica = modelPessoasJuridicas.getRowData();
         sessao = HibernateUtil.abrirSessao();
         try {
@@ -91,10 +101,38 @@ public class PessoaJuridicaControle {
         pesquisarPessoaJuridica();
     }
     
-    public void excluirEndereco(){
-        enderecos.remove(endereco);
-        endereco= new Endereco();
+    public void excluirEndereco(Endereco endereco){
+         FacesContext contexto = FacesContext.getCurrentInstance();
+        System.out.print("");
+        int indice = -1;
+        for(Endereco endereco1 : enderecos){
+            indice ++;
+            if(endereco1.getNumero().equals(endereco.getNumero()) && endereco1.getCep().equals(endereco.getCep())){
+                break;
+            }
+        }
+        
+        enderecos.remove(indice);
+        if(endereco.getId()!= null){
+            sessao = HibernateUtil.abrirSessao();
+            EnderecoDao enderecoDao = new EnderecoDaoImpl();
+            try {
+                enderecoDao.excluir(endereco, sessao);
+                FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Excluido com Sucesso!", "");
+                contexto.addMessage(null, mensagem);
+                
+            } catch (Exception e) {
+                System.out.print("erro ao excluir endereco " + e.getMessage());
+                FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Erro ao excluir!", "");
+            contexto.addMessage(null, mensagem);
+            }finally{
+                sessao.close();
+            }
+        }
 }
+    
     
     public void salvar(){
           FacesContext contexto = FacesContext.getCurrentInstance();
@@ -120,7 +158,8 @@ public class PessoaJuridicaControle {
               sessao.close();
           }
     }
-    public void addEndereco(){
+        
+      public void addEndereco(){
        if(enderecos == null){
            enderecos = new ArrayList<>();
        } 
@@ -130,6 +169,7 @@ public class PessoaJuridicaControle {
     }
 
 //getter e setter
+    //getter e setter
     public boolean isMostra_toolbar() {
         return mostra_toolbar;
     }

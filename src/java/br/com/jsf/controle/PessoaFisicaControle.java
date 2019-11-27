@@ -5,6 +5,8 @@
  */
 package br.com.jsf.controle;
 
+import br.com.jsf.dao.EnderecoDao;
+import br.com.jsf.dao.EnderecoDaoImpl;
 import br.com.jsf.dao.HibernateUtil;
 import br.com.jsf.dao.PessoaFisicaDao;
 import br.com.jsf.dao.PessoaFisicaDaoImpl;
@@ -71,6 +73,17 @@ public class PessoaFisicaControle {
         }
     }
     
+    public void carregarEndereco(Endereco endereco){
+        this.endereco = endereco;
+        if(pessoaFisica.getEnderecos() != null){
+            enderecos = pessoaFisica.getEnderecos();
+        }
+        excluirEndereco(endereco);
+        this.endereco.setId(null);
+    }
+    
+    
+    
     public void excluir(){
          FacesContext contexto = FacesContext.getCurrentInstance();
         pessoaFisica = modelPessoasFisicas.getRowData();
@@ -90,9 +103,36 @@ public class PessoaFisicaControle {
         pesquisarPessoaFisica();
     }
     
-    public void excluirEndereco(){
-        enderecos.remove(endereco);
-        endereco= new Endereco();
+    public void excluirEndereco(Endereco endereco){
+        FacesContext contexto = FacesContext.getCurrentInstance();
+        System.out.print("");
+        int indice = -1;
+        for(Endereco endereco1 : enderecos){
+            indice ++;
+            if(endereco1.getNumero().equals(endereco.getNumero()) && endereco1.getCep().equals(endereco.getCep())){
+                break;
+            }
+        }
+        
+        enderecos.remove(indice);
+        if(endereco.getId()!= null){
+            sessao = HibernateUtil.abrirSessao();
+            EnderecoDao enderecoDao = new EnderecoDaoImpl();
+            try {
+                enderecoDao.excluir(endereco, sessao);
+                FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Excluido com Sucesso!", "");
+                contexto.addMessage(null, mensagem);
+                
+            } catch (Exception e) {
+                System.out.print("erro ao excluir endereco " + e.getMessage());
+                FacesMessage mensagem = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                    "Erro ao excluir!", "");
+            contexto.addMessage(null, mensagem);
+            }finally{
+                sessao.close();
+            }
+        }
 }
     
     public void salvar(){
@@ -161,6 +201,7 @@ public class PessoaFisicaControle {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+        
     }
   
     public List<Endereco> getEnderecos() {
